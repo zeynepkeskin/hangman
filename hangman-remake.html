@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hangman</title>
     <style>
+        * {
+            transition: 100ms;
+        }
+
         body {
             background-color: rgb(218, 234, 245);
         }
@@ -20,7 +24,8 @@
         #head {
             width: 60px;
             height: 60px;
-            border: 10px solid rgb(210, 230, 240);
+            border: 10px solid;
+            border-color: rgb(210, 230, 240);
             border-radius: 50%;
             position: absolute;
             left: 110px;
@@ -33,9 +38,9 @@
         #arm1,
         #arm2 {
             width: 0px;
-            background-color: rgb(210, 230, 240);
             height: 110px;
-            border: 6px solid rgb(210, 230, 240);
+            border: 6px solid;
+            border-color: rgb(210, 230, 240);
             position: absolute;
             border-radius: 100%;
 
@@ -116,6 +121,33 @@
             font-size: 60px;
             user-select: none;
         }
+
+        #endScreen {
+            display: none;
+            position: absolute;
+            z-index: 2;
+            background-color: white;
+            padding: 100px;
+            border-radius: 10%;
+            font-family: monospace;
+            user-select: none;
+            color: rgb(142, 156, 187);
+            border: 10px solid lightgrey;
+            width: 50%;
+            Top: 50%;
+            Left: 50%;
+            Transform: translate(-50%, -50%);
+
+        }
+
+        #tryAgain {
+            font-size: 50px;
+            cursor: pointer;
+        }
+
+        #tryAgain:hover {
+            color: rgb(124, 136, 161);
+        }
     </style>
 </head>
 
@@ -130,6 +162,11 @@
         <div id="arm2"></div>
     </div>
     <div id="alphabet"></div>
+    <div id="endScreen">
+        <h1 id="end"></h1>
+        <p id="tryAgain" onclick="refresh()">Try Again?</p>
+    </div>
+
 
     <script>
         let alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -158,26 +195,64 @@
         let word = words[Math.floor(Math.random() * words.length)];
         let p = document.getElementById("word");
 
-        var answerArray = [];
-        for (var i = 0; i < word.length; i++) {
+        let answerArray = [];
+        for (let i = 0; i < word.length; i++) {
             answerArray[i] = "_";
         }
         p.innerHTML = answerArray.join(" ");
 
-        var remainingLetters = word.length;
+        let remainingLetters = word.length;
+        let strike = 0;
 
-        function guess(elm){
-            elm.style.backgroundColor = "pink";
+        function guess(elm) {
+            elm.style.backgroundColor = "rgb(253, 239, 247)";
+            let x = 0;
             for (let j = 0; j < word.length; j++) {
-                    if (word[j] === elm.innerHTML) {
-                        answerArray[j] = elm.innerHTML;
-                        remainingLetters--;
-                        p.innerHTML = answerArray.join(" ");
+                if (word[j] === elm.innerHTML) {
+                    answerArray[j] = elm.innerHTML;
+                    remainingLetters--;
+                    p.innerHTML = answerArray.join(" ");
+                    elm.style.backgroundColor = "rgb(227, 255, 239)";
+                    x = 1;
+                    if (remainingLetters === 0) {
+                        win();
                     }
+                }
+
+            }
+            if (x === 0) {
+                strike++;
+                limb();
+            }
+        }
+        function lose() {
+            document.getElementById("endScreen").style.display = "block";
+            document.getElementById("end").innerHTML = "YOU LOSE";
+            document.getElementById("end").style.fontSize = "100px";
+        }
+        function win() {
+            document.getElementById("endScreen").style.display = "block";
+            document.getElementById("end").innerHTML = "YOU WIN!";
+            document.getElementById("tryAgain").innerHTML = "Play Again?";
+            document.getElementById("end").style.fontSize = "100px";
+        }
+
+        function limb() {
+            let arr = ["head", "arm1", "arm2", "body", "leg1", "leg2"];
+
+            for (let k = 0; k < arr.length; k++) {
+                if (strike === k + 1) {
+                    document.getElementById(arr[k]).style.borderColor = "rgb(159, 172, 201)";
+                }
+                else if(strike > 6) {
+                    lose();
+                }
             }
         }
 
-        
+        function refresh() {
+            window.location.reload()
+        }
     </script>
 
 
