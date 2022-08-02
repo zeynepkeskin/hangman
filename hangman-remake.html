@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+    <style>
+        body {
+            background-color: rgb(218, 234, 245);
+        }
+
+        #man {
+            position: absolute;
+            right: 30%;
+            bottom: 50%;
+        }
+
+        #head {
+            width: 60px;
+            height: 60px;
+            border: 10px solid rgb(210, 230, 240);
+            border-radius: 50%;
+            position: absolute;
+            left: 110px;
+            top: 110px;
+        }
+
+        #body,
+        #leg1,
+        #leg2,
+        #arm1,
+        #arm2 {
+            width: 0px;
+            background-color: rgb(210, 230, 240);
+            height: 110px;
+            border: 6px solid rgb(210, 230, 240);
+            position: absolute;
+            border-radius: 100%;
+
+        }
+
+        #body {
+            left: 143px;
+            top: 180px;
+        }
+
+        #leg1 {
+            left: 122px;
+            top: 290px;
+            transform: rotate(20deg);
+        }
+
+        #leg2 {
+            left: 165px;
+            top: 290px;
+            transform: rotate(-20deg);
+        }
+
+        #arm1 {
+            left: 170px;
+            top: 180px;
+            transform: rotate(-20deg);
+        }
+
+        #arm2 {
+            left: 116px;
+            top: 180px;
+            transform: rotate(20deg);
+        }
+
+        #word {
+            position: absolute;
+            top: 500px;
+            font-size: xx-large;
+            font-family: monospace;
+            left: 100px;
+        }
+
+        .letter {
+            display: inline-block;
+            font-size: x-large;
+            font-family: monospace;
+            padding: 10px;
+            background-color: white;
+            border: 3px rgb(199, 210, 233) solid;
+            margin: 10px;
+            color: rgb(159, 168, 180);
+            cursor: pointer;
+            user-select: none;
+            border-radius: 15%;
+        }
+
+        .letter:hover {
+            background-color: aliceblue;
+        }
+
+        #alphabet {
+            background-color: rgb(218, 234, 245);
+            position: absolute;
+            width: 70%;
+            top: 100px;
+            left: 50%;
+            Transform: translate(-50%, -50%);
+
+        }
+
+        #word {
+            position: absolute;
+            top: 350px;
+            left: 50%;
+            Transform: translate(-50%, -50%);
+            color: rgb(159, 172, 201);
+            font-family: monospace;
+            font-size: 60px;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="word">fdsg</p>
+    <div id="man">
+        <div id="head"></div>
+        <div id="body"></div>
+        <div id="leg1"></div>
+        <div id="leg2"></div>
+        <div id="arm1"></div>
+        <div id="arm2"></div>
+    </div>
+    <div id="alphabet"></div>
+
+    <script>
+        let alphabet = "abcdefghijklmnopqrstuvwxyz";
+        let html = "";
+        for (let i = 0; i < alphabet.length; i++) {
+            html += "<div class='letter' onclick='guess(this)'>" + alphabet[i] + "</div>";
+        }
+        document.getElementById("alphabet").innerHTML = html;
+
+        let words = [
+            "hangman",
+            "water",
+            "computer",
+            "marine",
+            "table",
+            "window",
+            "mouse",
+            "stickman",
+            "printer",
+            "paper",
+            "pencil",
+            "glasses",
+            "gallon",
+            "balloon"
+        ];
+        let word = words[Math.floor(Math.random() * words.length)];
+        let p = document.getElementById("word");
+
+        var answerArray = [];
+        for (var i = 0; i < word.length; i++) {
+            answerArray[i] = "_";
+        }
+        p.innerHTML = answerArray.join(" ");
+
+        var remainingLetters = word.length;
+
+        function guess(elm){
+            elm.style.backgroundColor = "pink";
+            for (let j = 0; j < word.length; j++) {
+                    if (word[j] === elm.innerHTML) {
+                        answerArray[j] = elm.innerHTML;
+                        remainingLetters--;
+                        p.innerHTML = answerArray.join(" ");
+                    }
+            }
+        }
+
+        
+    </script>
+
+
+
+
+
+</body>
+
+</html>
